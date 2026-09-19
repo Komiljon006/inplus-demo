@@ -1,0 +1,11 @@
+[Unit]
+Description=IN PLUS Sinov agenti (x0)
+After=network.target
+
+[Service]
+Type=oneshot
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/x0_sinov/main.py --bir-marta

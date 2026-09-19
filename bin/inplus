@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+"""IN PLUS CLI.
+
+  inplus rejim                 # holatni ko'rsatadi
+  inplus ishga <AGENT>         # agentni bir marta ishga tushiradi (X0, D1, ...)
+  inplus ishga X0 --yiqil      # ataylab yiqitish
+  inplus holat                 # heartbeat jadvali
+  inplus shlyuz yubor --kanal tg --skript S-999 --kimga xodim:X-001 --oz matn=salom
+  inplus shlyuz jurnal [--bugun]
+  inplus shlyuz statistika
+  inplus arxiv oqi <nisbiy/yol/YYYY-MM-DD.json>   # W1 arxivlagan faylni o'qiydi
+
+Mac'da systemd yo'q — `ishga` to'g'ridan-to'g'ri ishlaydi.
+Shlyuzga murojaat qiladigan buyruqlar uchun servis ishlab turishi kerak:
+`bin/inplus ishga SHLYUZ` (yoki `python3 agents/shlyuz/main.py &`).
+"""
+import argparse
+import os
+import sys
+import json
+import sqlite3
+import subprocess
+import time as _time
+import urllib.request
+import urllib.error
+from pathlib import Path
+from datetime import datetime
+
+BIN = Path(__file__).resolve()
+ILDIZ = BIN.parents[1]
+LIB = ILDIZ / "lib"
+sys.path.insert(0, str(LIB))
+
+os.environ.setdefault("INPLUS_ILDIZ", str(ILDIZ))
+from inplus import konfig  # noqa: E402
+
+
+def _agent_papka(token: str):
+    """X0 -> agents/x0_sinov. Folder nomi token bilan boshlansa mos."""
+    t = token.lower()
+    agents = ILDIZ / "agents"
+    nomzodlar = []
+    for d in sorted(agents.iterdir()):
+        if not d.is_dir() or d.name.startswith("_"):
+            continue
+        if d.name == t or d.name.startswith(t + "_"):
+            nomzodlar.append(d)
+    if not nomzodlar:
+        return None
+    return nomzodlar[0]
+
+
+def cmd_rejim(_):
+    rj = konfig.rejim()
+    tg = "real" if konfig.env("TG_REAL", "0") == "1" or rj == "real" else "mock"
+    ets_port = konfig.env("ETS_MOCK_URL", "http://127.0.0.1:8472").rsplit(":", 1)[-1]
+    print(f"rejim: {rj} · TG: {tg} · ETS: mock({ets_port}) · ildiz: {konfig.ILDIZ}")
+    return 0
+
+
+def cmd_ishga(args):
+    if not args:
+        print("ishlatish: inplus ishga <AGENT> [--sana ...] [--rejim ...] [--yiqil]")
+        return 2
+    token = args[0]
+    qolgan = args[1:]
+    papka = _agent_papka(token)
+    if papka is None:
+        print(f"agent topilmadi: {token} (agents/ ichida yo'q)")
+        return 2
+    main_py = papka / "main.py"
+    env = dict(os.environ)
+    env["INPLUS_ILDIZ"] = str(ILDIZ)
+    # --yiqil -> X0 uchun env, argumentga o'tkazmaymiz
+    if "--yiqil" in qolgan:
+        qolgan = [a for a in qolgan if a != "--yiqil"]
+        env["INPLUS_X0_YIQIL"] = "1"
+    argv = [sys.executable, str(main_py), "--bir-marta"] + qolgan
+    print(f"ishga tushmoqda: {token} -> {papka.name}")
+    return subprocess.call(argv, env=env)
+
+
+def _rang(holat, eski):
+    if holat == "xato":
+        return "🔴"
+    if eski:
+        return "🟡"
+    return "🟢"
+
+
+def cmd_holat(_):
+    agentlar = konfig.konfig_json("agentlar.json")
+    hb_dir = konfig.run_yol("heartbeat")
+    print(f"{'AGENT':8} {'HOLAT':11} {'OXIRGI':20} {'SLA':>4}")
+    print("-" * 50)
+    hozir = konfig.hozir()
+    for aid, meta in agentlar.items():
+        p = hb_dir / f"{aid}.json"
+        if not p.exists():
+            print(f"{aid:8} {'—':11} {'(heartbeat yoq)':20}")
+            continue
+        hb = json.loads(p.read_text(encoding="utf-8"))
+        try:
+            vaqt = datetime.fromisoformat(hb["vaqt"])
+            yosh_daq = (hozir - vaqt).total_seconds() / 60
+        except Exception:
+            yosh_daq = 0
+        sla = meta.get("sla_daq", 0)
+        eski = yosh_daq > sla if sla else False
+        r = _rang(hb.get("holat"), eski)
+        print(f"{aid:8} {hb.get('holat',''):11} {hb.get('vaqt','')[:19]:20} "
+              f"{sla:>4} {r}")
+    return 0
+
+
+# --- shlyuz kichik buyruqlari ---
+def _shlyuz_post(yol, payload, timeout=5.0):
+    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    req = urllib.request.Request(konfig.shlyuz_url() + yol, data=data,
+                                 headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status, json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        try:
+            return e.code, json.loads(e.read().decode("utf-8"))
+        except Exception:
+            return e.code, {"xato": str(e)}
+
+
+def _shlyuz_get(yol, timeout=5.0):
+    req = urllib.request.Request(konfig.shlyuz_url() + yol, method="GET")
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
+def _kimga_ochish(token: str):
+    """xodim:X-001 | talaba:gc:10877 | telefon:+998... | telegram:123 -> dict."""
+    if ":" not in token:
+        return {"tur": "xodim", "id": token, "telegram_id": None, "telefon": None}
+    prefiks, qolgan = token.split(":", 1)
+    prefiks_l = prefiks.lower()
+    if prefiks_l in ("xodim", "talaba", "lid"):
+        kimga = {"tur": prefiks_l, "id": qolgan, "telegram_id": None, "telefon": None}
+        if prefiks_l == "xodim" and qolgan == "X-001":
+            tg_admin = konfig.env("TG_ADMIN_ID", "")
+            if tg_admin:
+                kimga["telegram_id"] = int(tg_admin)
+        return kimga
+    if prefiks_l == "telefon":
+        return {"tur": "xodim", "id": f"tel:{qolgan}", "telegram_id": None, "telefon": qolgan}
+    if prefiks_l in ("telegram", "tg"):
+        return {"tur": "xodim", "id": f"tg:{qolgan}", "telegram_id": int(qolgan), "telefon": None}
+    return {"tur": "xodim", "id": token, "telegram_id": None, "telefon": None}
+
+
+def _shlyuz_yubor(argv):
+    ap = argparse.ArgumentParser(prog="inplus shlyuz yubor")
+    ap.add_argument("--kanal", required=True, choices=["sms", "tg"])
+    ap.add_argument("--skript", required=True)
+    ap.add_argument("--kimga", required=True)
+    ap.add_argument("--oz", nargs="*", default=[])
+    ap.add_argument("--til", default="uz")
+    ap.add_argument("--agent", default="CLI")
+    ap.add_argument("--muhimlik", default="oddiy", choices=["oddiy", "kritik"])
+    ap.add_argument("--idempotent", default=None)
+    args = ap.parse_args(argv)
+
+    kimga = _kimga_ochish(args.kimga)
+    ozgaruvchilar = {}
+    for tok in args.oz:
+        if "=" not in tok:
+            continue
+        k, _, v = tok.partition("=")
+        ozgaruvchilar[k] = v
+
+    idempotent = args.idempotent or (
+        f"{args.agent}:{args.kanal}:{args.skript}:{kimga['tur']}:{kimga['id']}:{konfig.bugun()}"
+    )
+    sorov = {
+        "kimdan_agent": args.agent, "kanal": args.kanal, "kimga": kimga,
+        "skript_id": args.skript, "til": args.til, "ozgaruvchilar": ozgaruvchilar,
+        "idempotent_kalit": idempotent, "muhimlik": args.muhimlik,
+    }
+    try:
+        kod, javob = _shlyuz_post("/yubor", sorov)
+    except (urllib.error.URLError, ConnectionError, OSError) as e:
+        print(f"shlyuz ulanmadi: {e} (avval: bin/inplus ishga SHLYUZ)")
+        return 1
+
+    holat = javob.get("holat")
+    if holat == "rad":
+        print(f"rad: {javob.get('sabab')}")
+        return 1
+    if holat == "dublikat":
+        print(f"dublikat (oldingi xabar_id: {javob.get('xabar_id')})")
+        return 0
+
+    xabar_id = javob.get("xabar_id")
+    print(f"{xabar_id} navbatda", end="", flush=True)
+    yakun = javob
+    for _ in range(20):
+        _time.sleep(0.5)
+        try:
+            yakun = _shlyuz_get(f"/holat/{xabar_id}")
+        except Exception:
+            break
+        if yakun.get("holat") not in ("navbatda", "yuborilmoqda"):
+            break
+    holat_oxirgi = yakun.get("holat")
+    if holat_oxirgi in ("yuborildi", "yetkazildi"):
+        print(f" -> {holat_oxirgi} (provayder_id {yakun.get('provayder_id')})")
+    else:
+        print(f" -> {holat_oxirgi} ({yakun.get('rad_sabab') or ''})")
+    return 0
+
+
+def _shlyuz_jurnal(argv):
+    ap = argparse.ArgumentParser(prog="inplus shlyuz jurnal")
+    ap.add_argument("--bugun", action="store_true")
+    args = ap.parse_args(argv)
+    db = konfig.data("shlyuz.db")
+    if not db.exists():
+        print("shlyuz.db topilmadi (hali xabar yuborilmagan)")
+        return 0
+    conn = sqlite3.connect(str(db))
+    conn.row_factory = sqlite3.Row
+    sorov = ("SELECT kanal, skript_id, holat, COUNT(*) n, COALESCE(SUM(narx_som),0) narx "
+             "FROM xabarlar")
+    parametrlar = []
+    if args.bugun:
+        sorov += " WHERE substr(yaratildi,1,10)=?"
+        parametrlar.append(konfig.bugun())
+    sorov += " GROUP BY kanal, skript_id, holat ORDER BY kanal, skript_id, holat"
+    qatorlar = conn.execute(sorov, parametrlar).fetchall()
+    conn.close()
+    print(f"{'KANAL':6} {'SKRIPT':8} {'HOLAT':10} {'SON':>4} {'NARX_SOM':>9}")
+    print("-" * 42)
+    for r in qatorlar:
+        print(f"{r['kanal']:6} {r['skript_id']:8} {r['holat']:10} {r['n']:>4} {r['narx']:>9}")
+    return 0
+
+
+def _shlyuz_statistika(_argv):
+    try:
+        st = _shlyuz_get("/statistika")
+    except Exception as e:
+        print(f"shlyuz ulanmadi: {e}")
+        return 1
+    print(f"jami: {st.get('jami')}")
+    for row in st.get("kesim", []):
+        print(f"  {row['kanal']:6} {row['skript_id']:8} {row['holat']:10} "
+              f"{row['n']:>4}  narx_som={row['narx_som']}")
+    return 0
+
+
+def cmd_shlyuz(args):
+    if not args:
+        print("ishlatish: inplus shlyuz yubor|jurnal|statistika ...")
+        return 2
+    sub, qolgan = args[0], args[1:]
+    if sub == "yubor":
+        return _shlyuz_yubor(qolgan)
+    if sub == "jurnal":
+        return _shlyuz_jurnal(qolgan)
+    if sub == "statistika":
+        return _shlyuz_statistika(qolgan)
+    print(f"noma'lum shlyuz komandasi: {sub}")
+    return 2
+
+
+def cmd_arxiv(args):
+    """inplus arxiv oqi <data/ ga nisbiy yol> — W1 arxivlagan faylni o'qiydi."""
+    if len(args) < 2 or args[0] != "oqi":
+        print("ishlatish: inplus arxiv oqi <nisbiy/yol/YYYY-MM-DD.json>")
+        return 2
+    sys.path.insert(0, str(ILDIZ / "agents" / "w1_xotira"))
+    import main as _w1_main  # noqa: E402  (agents/w1_xotira/main.py)
+    natija = _w1_main.arxiv_oqi(args[1])
+    if natija is None:
+        print(f"topilmadi: {args[1]} (na data/ da, na data/arxiv/*.tar.gz da)")
+        return 1
+    print(natija)
+    return 0
+
+
+KOMANDALAR = {
+    "rejim": cmd_rejim,
+    "ishga": cmd_ishga,
+    "holat": cmd_holat,
+    "shlyuz": cmd_shlyuz,
+    "arxiv": cmd_arxiv,
+}
+
+
+def main(argv):
+    if not argv or argv[0] in ("-h", "--help", "yordam"):
+        print(__doc__)
+        return 0
+    komanda = argv[0]
+    fn = KOMANDALAR.get(komanda)
+    if fn is None:
+        print(f"noma'lum komanda: {komanda}\n")
+        print(__doc__)
+        return 2
+    return fn(argv[1:])
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

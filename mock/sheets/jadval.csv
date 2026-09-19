@@ -1,0 +1,15 @@
+kurs_id,nom,format,narx,davomiylik_oy,ustoz_id,guruh_id,boshlanish,tugash,kunlar,vaqt,xona,sigim
+K-BUX-01,Buxgalter noldan,offline,2400000,3,X-010,G-BUX-01-SEN,01.09.2026,30.11.2026,"du,chor,ju",18:30-20:30,A-1,20
+K-BUX-01,Buxgalter noldan,offline,2400000,3,X-010,G-BUX-01-OKT,01.09.2026,30.11.2026,"se,pay",10:00-12:00,A-1,20
+K-ENG-01,Ingliz tili A1,offline,1500000,4,X-011,G-ENG-01-SEN,01.09.2026,30.11.2026,"du,chor",17:00-18:30,B-1,20
+K-ENG-01,Ingliz tili A1,offline,1500000,4,X-011,G-ENG-01-OKT,01.09.2026,30.11.2026,"se,pay",19:00-20:30,B-1,20
+K-SMM-01,SMM boshlang'ich,online,1200000,2,X-012,G-SMM-01-SEN,01.09.2026,30.11.2026,"se,pay",20:00-21:30,C-1,20
+K-SMM-01,SMM boshlang'ich,online,1200000,2,X-012,G-SMM-01-OKT,01.09.2026,30.11.2026,"du,ju",10:00-11:30,C-1,20
+K-IT-01,Dasturlash noldan,offline,3200000,6,X-013,G-IT-01-SEN,01.09.2026,30.11.2026,"du,chor,ju",18:00-20:00,D-1,20
+K-IT-01,Dasturlash noldan,offline,3200000,6,X-013,G-IT-01-OKT,01.09.2026,30.11.2026,"se,pay,shan",14:00-16:00,D-1,20
+K-DIZ-01,Grafik dizayn,offline,2100000,3,X-014,G-DIZ-01-SEN,01.09.2026,30.11.2026,"du,chor,ju",18:30-20:30,A-2,20
+K-MAT-01,Matematika,offline,900000,5,X-015,G-MAT-01-SEN,01.09.2026,30.11.2026,"se,pay",15:00-16:30,E-1,20
+K-BUX-02,Buxgalter PRO,offline,3000000,3,X-010,G-BUX-02-SEN,01.09.2026,30.11.2026,"du,chor",18:30-20:30,F-1,20
+K-ENG-02,IELTS,offline,2800000,4,X-011,G-ENG-02-SEN,01.09.2026,30.11.2026,"se,pay,shan",17:00-19:00,B-2,20
+K-MAT-02,Fizika,offline,1000000,4,X-015,G-MAT-02-SEN,30.09.2026,30.11.2026,"du,chor",15:00-16:30,E-2,18
+K-DIZ-02,Veb dizayn,offline,2500000,3,X-014,G-DIZ-02-SEN,01.09.2026,30.11.2026,"du,chor,ju",18:30-20:30,A-2,16

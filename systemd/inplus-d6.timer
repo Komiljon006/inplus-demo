@@ -1,0 +1,9 @@
+[Unit]
+Description=IN PLUS Kurslar jadvali timer (d6)
+
+[Timer]
+OnCalendar=*-*-* 05:50:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

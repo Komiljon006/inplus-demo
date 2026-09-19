@@ -1,0 +1,9 @@
+[Unit]
+Description=IN PLUS X1 audit timer (x1)
+
+[Timer]
+OnCalendar=*-*-* 22:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

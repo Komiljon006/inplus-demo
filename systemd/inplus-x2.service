@@ -1,0 +1,17 @@
+[Unit]
+Description=IN PLUS Doktor (x2)
+After=network.target
+
+[Service]
+Type=simple
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/x2_doktor/main.py
+Restart=always
+RestartSec=3
+WatchdogSec=120
+
+[Install]
+WantedBy=multi-user.target

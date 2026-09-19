@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "paket",
+  "description": "D1 Sborshik chiqishi — kunlik ma'lumot paketi (data/paket/<sana>.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["versiya", "paket_id", "yaratildi", "rejim", "hash", "manbalar", "kurslar_ref", "lidlar", "talabalar", "tolovlar", "xodimlar", "statistika"],
+  "properties": {
+    "versiya": {"type": "string", "pattern": "^\\d+\\.\\d+$"},
+    "paket_id": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "yaratildi": {"type": "string", "format": "date-time"},
+    "rejim": {"type": "string", "enum": ["mock", "real"]},
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{6,64}$"},
+    "holat_umumiy": {"type": "string", "enum": ["toliq", "qisman"]},
+    "manbalar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amocrm", "getcourse", "sheets"],
+      "properties": {
+        "amocrm": {"$ref": "#/definitions/manba"},
+        "getcourse": {"$ref": "#/definitions/manba"},
+        "sheets": {"$ref": "#/definitions/manba"}
+      }
+    },
+    "kurslar_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fayl", "hash", "versiya"],
+      "properties": {
+        "fayl": {"type": "string"},
+        "hash": {"type": "string"},
+        "versiya": {"type": "string"}
+      }
+    },
+    "lidlar": {"type": "array", "items": {"$ref": "#/definitions/lid"}},
+    "talabalar": {"type": "array", "items": {"$ref": "#/definitions/talaba"}},
+    "tolovlar": {"type": "array", "items": {"$ref": "#/definitions/tolov"}},
+    "xodimlar": {"type": "array", "items": {"$ref": "#/definitions/xodim"}},
+    "statistika": {
+      "type": "object",
+      "required": ["lidlar", "talabalar", "faol_talabalar", "qarzdorlar", "qarz_jami", "tolovlar_kecha"],
+      "properties": {
+        "lidlar": {"type": "integer"},
+        "talabalar": {"type": "integer"},
+        "faol_talabalar": {"type": "integer"},
+        "qarzdorlar": {"type": "integer"},
+        "qarz_jami": {"type": "integer"},
+        "tolovlar_kecha": {"type": "integer"}
+      }
+    }
+  },
+  "definitions": {
+    "manba": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["holat", "olindi", "qator", "davomiylik_s", "xato"],
+      "properties": {
+        "holat": {"type": "string", "enum": ["ok", "eski", "xato"]},
+        "olindi": {"type": ["string", "null"]},
+        "qator": {"type": "integer"},
+        "davomiylik_s": {"type": "number"},
+        "xato": {"type": ["string", "null"]},
+        "ogohlantirish": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "lid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lid_id", "manba", "ism", "telefon", "bosqich", "yaratildi"],
+      "properties": {
+        "lid_id": {"type": "string", "pattern": "^(amo|gc|sh):.+"},
+        "manba": {"type": "string"},
+        "ism": {"type": "string"},
+        "telefon": {"type": ["string", "null"], "pattern": "^\\+998\\d{9}$"},
+        "telegram_id": {"type": ["integer", "null"]},
+        "bosqich": {"type": "string", "enum": ["yangi", "aloqa", "konsultatsiya", "sinov_dars", "tolov_kutish", "sotildi", "yoqotildi", "qayta"]},
+        "bosqich_kodi": {"type": ["integer", "null"]},
+        "kurs_id": {"type": ["string", "null"]},
+        "menejer_id": {"type": ["string", "null"]},
+        "yaratildi": {"type": "string"},
+        "oxirgi_aloqa": {"type": ["string", "null"]},
+        "manba_kanal": {"type": ["string", "null"]},
+        "summa": {"type": ["integer", "null"]},
+        "teglar": {"type": "array", "items": {"type": "string"}},
+        "xom": {"type": "object"}
+      }
+    },
+    "talaba": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["talaba_id", "ism", "telefon", "kurs_id", "holat"],
+      "properties": {
+        "talaba_id": {"type": "string", "pattern": "^(amo|gc|sh):.+"},
+        "ism": {"type": "string"},
+        "telefon": {"type": ["string", "null"], "pattern": "^\\+998\\d{9}$"},
+        "telegram_id": {"type": ["integer", "null"]},
+        "email": {"type": ["string", "null"]},
+        "kurs_id": {"type": ["string", "null"]},
+        "guruh_id": {"type": ["string", "null"]},
+        "holat": {"type": "string", "enum": ["faol", "tugatdi", "tashladi", "muzlatilgan", "kutmoqda"]},
+        "boshladi": {"type": ["string", "null"]},
+        "tolov": {
+          "type": "object",
+          "properties": {
+            "jami": {"type": "integer"},
+            "tolandi": {"type": "integer"},
+            "qarz": {"type": "integer"},
+            "keyingi_sana": {"type": ["string", "null"]},
+            "valyuta": {"type": "string"}
+          }
+        },
+        "davomat_foiz": {"type": ["integer", "null"]},
+        "oxirgi_dars": {"type": ["string", "null"]},
+        "progress_foiz": {"type": ["integer", "null"]},
+        "xom": {"type": "object"}
+      }
+    },
+    "tolov": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tolov_id", "talaba_id", "summa", "valyuta", "sana"],
+      "properties": {
+        "tolov_id": {"type": "string", "pattern": "^(amo|gc|sh):.+"},
+        "talaba_id": {"type": "string"},
+        "summa": {"type": "integer"},
+        "valyuta": {"type": "string"},
+        "sana": {"type": "string"},
+        "usul": {"type": ["string", "null"]},
+        "kurs_id": {"type": ["string", "null"]},
+        "izoh": {"type": ["string", "null"]}
+      }
+    },
+    "xodim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["xodim_id", "ism", "rol", "faol"],
+      "properties": {
+        "xodim_id": {"type": "string", "pattern": "^X-\\d+$"},
+        "ism": {"type": "string"},
+        "rol": {"type": "string", "enum": ["menejer", "direktor", "ustoz", "admin"]},
+        "telefon": {"type": ["string", "null"], "pattern": "^\\+998\\d{9}$"},
+        "telegram_id": {"type": ["integer", "null"]},
+        "faol": {"type": "boolean"}
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "versiya": "1.0",
+  "yaratildi": "2026-09-19T05:50:08+05:00",
+  "manba": {"tur": "sheets", "id": "1AbC", "varaq": "Jadval", "qator": 14},
+  "validatsiya": {
+    "holat": "ogohlantirish",
+    "xatolar": [
+      {"qator": 12, "maydon": "xona", "qiymat": "A-2", "xabar": "G-BUX-02 bilan bir vaqtda bir xona", "daraja": "ogohlantirish"}
+    ]
+  },
+  "kurslar": [
+    {
+      "kurs_id": "K-BUX-01",
+      "nom": "Buxgalter noldan",
+      "format": "offline",
+      "narx": 2400000,
+      "valyuta": "UZS",
+      "davomiylik_oy": 3,
+      "ustoz_id": "X-010",
+      "faol": true,
+      "guruhlar": [
+        {"guruh_id": "G-BUX-01-SEN", "boshlanish": "2026-09-01", "tugash": "2026-11-30",
+         "kunlar": ["du", "chor", "ju"], "vaqt": "18:30-20:30", "xona": "A-1",
+         "sigim": 20, "band": 17, "holat": "davom"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[Unit]
+Description=IN PLUS Skript reestri (n3)
+After=network.target
+
+[Service]
+Type=oneshot
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/n3_reestr/main.py --bir-marta

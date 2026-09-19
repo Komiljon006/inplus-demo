@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IN PLUS — dashboard</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;margin:2rem;background:#f7f8fa;color:#1a1d21}
+  h1{margin-bottom:.2rem}
+  .meta{color:#666;font-size:.9rem;margin-bottom:1.2rem}
+  table{border-collapse:collapse;width:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  td,th{border:1px solid #e2e5e9;padding:.5rem .8rem;text-align:left;font-size:.92rem}
+  th{background:#f0f1f3}
+  tr.qizil{background:#fdecec}
+  tr.sariq{background:#fff8e1}
+  tr.yashil{background:#eefaf0}
+  .dot{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.4rem}
+  .dot.qizil{background:#e5484d}
+  .dot.sariq{background:#f5a623}
+  .dot.yashil{background:#30a46c}
+  .dot.yoq{background:#bbb}
+  code{background:#eee;padding:.1rem .3rem;border-radius:3px}
+  #xato{color:#a00;margin-top:1rem}
+  footer{margin-top:1.5rem;font-size:.8rem;color:#888}
+</style>
+</head>
+<body>
+<h1>IN PLUS monitoring</h1>
+<p class="meta">Manba: <code>data/dashboard.json</code> (X2 — Doktor har 30 s da yozadi). 15 s da avtomat yangilanadi.</p>
+<table id="jadval">
+  <thead>
+    <tr>
+      <th></th><th>Agent</th><th>Nom</th><th>Holat</th><th>Oxirgi</th><th>SLA (daq)</th>
+      <th>Ishlar (ok/xato)</th><th>Davomiylik (s)</th><th>Ochiq insident</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<p id="xato" hidden></p>
+<footer id="footer"></footer>
+
+<script>
+const RANG_NOM = {qizil: "🔴 qizil", sariq: "🟡 sariq", yashil: "🟢 yashil"};
+
+function yukla() {
+  fetch('data/dashboard.json', {cache: 'no-store'})
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(chiz)
+    .catch(e => {
+      document.querySelector('#xato').hidden = false;
+      document.querySelector('#xato').textContent =
+        "dashboard.json hali yo'q yoki o'qib bo'lmadi (" + e + "). X2 ni ishga tushiring: bin/inplus ishga X2";
+    });
+}
+
+function chiz(d) {
+  document.querySelector('#xato').hidden = true;
+  const tb = document.querySelector('#jadval tbody');
+  tb.innerHTML = '';
+  (d.agentlar || []).forEach(a => {
+    const tr = document.createElement('tr');
+    tr.className = a.rang || '';
+    const dot = `<span class="dot ${a.holat ? (a.rang || '') : 'yoq'}"></span>`;
+    tr.innerHTML = `
+      <td>${dot}</td>
+      <td><b>${a.agent}</b></td>
+      <td>${a.nom || ''}</td>
+      <td>${a.holat || '— (hali ishlamagan)'}</td>
+      <td>${(a.oxirgi || '').replace('T', ' ').slice(0, 19)}</td>
+      <td>${a.sla_daq ?? ''}</td>
+      <td>${a.ishlar_ok ?? 0} / ${a.ishlar_xato ?? 0}</td>
+      <td>${(a.davomiylik_s_jami ?? 0)}</td>
+      <td>${a.ochiq_insident ? '⚠️ ' + (a.insident_kod || '') : '—'}</td>`;
+    tb.appendChild(tr);
+  });
+  document.querySelector('#footer').textContent =
+    'Yangilandi: ' + (d.yangilandi || '?') + ' · sana: ' + (d.sana || '?') +
+    (d.shlyuz ? ' · shlyuz: ' + JSON.stringify(d.shlyuz.jami || d.shlyuz) : ' · shlyuz: (hali ulanmagan)');
+}
+
+yukla();
+setInterval(yukla, 15000);
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "izoh": "amoCRM status_id -> ichki bosqich kodi. Mijoz voronkasidan to'ldiriladi.",
+  "xarita": {
+    "140": "yangi",
+    "141": "aloqa",
+    "142": "konsultatsiya",
+    "143": "sinov_dars",
+    "144": "tolov_kutish",
+    "142_won": "sotildi",
+    "143_lost": "yoqotildi",
+    "145": "qayta"
+  },
+  "status": {
+    "140": "yangi",
+    "141": "aloqa",
+    "142": "konsultatsiya",
+    "143": "sinov_dars",
+    "144": "tolov_kutish",
+    "145": "qayta",
+    "146": "sotildi",
+    "147": "yoqotildi"
+  }
+}

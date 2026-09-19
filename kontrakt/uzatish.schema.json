@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "uzatish",
+  "description": "Bitta uzatish satri (data/uzatish/<sana>.jsonl) — berdi yoki oldi",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["uzatish_id", "vaqt", "yonalish", "kimdan", "kimga", "tur", "obyekt", "hash"],
+  "properties": {
+    "uzatish_id": {"type": "string"},
+    "vaqt": {"type": "string", "format": "date-time"},
+    "yonalish": {"type": "string", "enum": ["berdi", "oldi"]},
+    "kimdan": {"type": "string"},
+    "kimga": {"type": "string"},
+    "tur": {"type": "string", "enum": ["fayl", "xabar", "buyruq"]},
+    "obyekt": {"type": "string"},
+    "hash": {"type": "string"},
+    "soni": {"type": "object"},
+    "kutish_daq": {"type": ["integer", "null"]}
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "versiya": "1.0",
+  "paket_id": "2026-09-19",
+  "yaratildi": "2026-09-19T06:01:44+05:00",
+  "rejim": "mock",
+  "hash": "sha256:9f2c1b7e",
+  "holat_umumiy": "qisman",
+  "manbalar": {
+    "amocrm": {"holat": "ok", "olindi": "2026-09-19T06:00:10+05:00", "qator": 412, "davomiylik_s": 8.2, "xato": null},
+    "getcourse": {"holat": "ok", "olindi": "2026-09-19T06:00:31+05:00", "qator": 268, "davomiylik_s": 19.7, "xato": null},
+    "sheets": {"holat": "eski", "olindi": "2026-09-18T06:00:12+05:00", "qator": 14, "davomiylik_s": 0, "xato": "429 quota; kechagi nusxa ishlatildi"}
+  },
+  "kurslar_ref": {"fayl": "data/courses.json", "hash": "sha256:1b7e", "versiya": "1.0"},
+  "lidlar": [
+    {
+      "lid_id": "amo:48213",
+      "manba": "amocrm",
+      "ism": "Dilnoza Karimova",
+      "telefon": "+998901234567",
+      "telegram_id": null,
+      "bosqich": "konsultatsiya",
+      "bosqich_kodi": 142,
+      "kurs_id": "K-BUX-01",
+      "menejer_id": "X-003",
+      "yaratildi": "2026-09-17T14:20:00+05:00",
+      "oxirgi_aloqa": "2026-09-18T11:05:00+05:00",
+      "manba_kanal": "instagram",
+      "summa": 2400000,
+      "teglar": ["sentyabr", "chegirma"],
+      "xom": {"pipeline_id": 7712, "status_id": 142}
+    }
+  ],
+  "talabalar": [
+    {
+      "talaba_id": "gc:10877",
+      "ism": "Bekzod Rahimov",
+      "telefon": "+998935550011",
+      "telegram_id": 123456789,
+      "email": "b.rahimov@mail.ru",
+      "kurs_id": "K-BUX-01",
+      "guruh_id": "G-BUX-01-SEN",
+      "holat": "faol",
+      "boshladi": "2026-09-01",
+      "tolov": {"jami": 2400000, "tolandi": 1200000, "qarz": 1200000, "keyingi_sana": "2026-10-01", "valyuta": "UZS"},
+      "davomat_foiz": 83,
+      "oxirgi_dars": "2026-09-18",
+      "progress_foiz": 27,
+      "xom": {"user_id": 10877, "group": "Buxgalter"}
+    }
+  ],
+  "tolovlar": [
+    {"tolov_id": "gc:p:55120", "talaba_id": "gc:10877", "summa": 1200000, "valyuta": "UZS", "sana": "2026-09-01", "usul": "payme", "kurs_id": "K-BUX-01", "izoh": "1-qism"}
+  ],
+  "xodimlar": [
+    {"xodim_id": "X-003", "ism": "Madina", "rol": "menejer", "telefon": "+998901112233", "telegram_id": 987654321, "faol": true},
+    {"xodim_id": "X-001", "ism": "Direktor", "rol": "direktor", "telefon": "+998900000001", "telegram_id": 111111111, "faol": true}
+  ],
+  "statistika": {"lidlar": 412, "talabalar": 268, "faol_talabalar": 201, "qarzdorlar": 37, "qarz_jami": 44400000, "tolovlar_kecha": 6}
+}

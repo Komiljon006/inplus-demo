@@ -1,0 +1,27 @@
+{
+  "versiya": "1.0",
+  "paket_id": "2026-09-19",
+  "yaratildi": "2026-09-19T06:01:44+05:00",
+  "rejim": "mock",
+  "hash": "sha256:9f2c1b7e",
+  "manbalar": {
+    "amocrm": {"holat": "ok", "olindi": "2026-09-19T06:00:10+05:00", "qator": 412, "davomiylik_s": 8.2, "xato": null},
+    "getcourse": {"holat": "ok", "olindi": "2026-09-19T06:00:31+05:00", "qator": 268, "davomiylik_s": 19.7, "xato": null},
+    "sheets": {"holat": "ok", "olindi": "2026-09-19T06:00:12+05:00", "qator": 14, "davomiylik_s": 0, "xato": null}
+  },
+  "kurslar_ref": {"fayl": "data/courses.json", "hash": "sha256:1b7e", "versiya": "1.0"},
+  "lidlar": [
+    {
+      "lid_id": "48213",
+      "manba": "amocrm",
+      "ism": "Dilnoza Karimova",
+      "telefon": "901234567",
+      "bosqich": "notogri_bosqich",
+      "yaratildi": "2026-09-17T14:20:00+05:00"
+    }
+  ],
+  "talabalar": [],
+  "tolovlar": [],
+  "xodimlar": [],
+  "statistika": {"lidlar": 412, "talabalar": 268, "faol_talabalar": 201, "qarzdorlar": 37, "qarz_jami": 44400000, "tolovlar_kecha": 6}
+}

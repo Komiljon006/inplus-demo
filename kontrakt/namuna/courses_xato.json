@@ -1,0 +1,21 @@
+{
+  "versiya": "1.0",
+  "yaratildi": "2026-09-19T05:50:08+05:00",
+  "manba": {"tur": "sheets", "id": "1AbC", "varaq": "Jadval", "qator": 14},
+  "validatsiya": {"holat": "ok", "xatolar": []},
+  "kurslar": [
+    {
+      "kurs_id": "BUX01",
+      "nom": "Buxgalter noldan",
+      "format": "seminar",
+      "narx": 0,
+      "valyuta": "UZS",
+      "faol": true,
+      "guruhlar": [
+        {"guruh_id": "GBUX01SEN", "boshlanish": "2026-09-01", "tugash": "2026-11-30",
+         "kunlar": ["du"], "vaqt": "18:30-20:30", "xona": "A-1",
+         "sigim": 20, "band": 17, "holat": "davom"}
+      ]
+    }
+  ]
+}

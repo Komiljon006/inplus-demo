@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "courses",
+  "description": "D6 chiqishi — kurslar va guruhlar jadvali (data/courses.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["versiya", "yaratildi", "manba", "validatsiya", "kurslar"],
+  "properties": {
+    "versiya": {"type": "string", "pattern": "^\\d+\\.\\d+$"},
+    "yaratildi": {"type": "string", "format": "date-time"},
+    "manba": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tur", "qator"],
+      "properties": {
+        "tur": {"type": "string"},
+        "id": {"type": ["string", "null"]},
+        "varaq": {"type": ["string", "null"]},
+        "qator": {"type": "integer"}
+      }
+    },
+    "validatsiya": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["holat", "xatolar"],
+      "properties": {
+        "holat": {"type": "string", "enum": ["ok", "ogohlantirish", "xato"]},
+        "xatolar": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["qator", "maydon", "qiymat", "xabar", "daraja"],
+            "properties": {
+              "qator": {"type": "integer"},
+              "maydon": {"type": "string"},
+              "qiymat": {"type": ["string", "null"]},
+              "xabar": {"type": "string"},
+              "daraja": {"type": "string", "enum": ["xato", "ogohlantirish"]}
+            }
+          }
+        }
+      }
+    },
+    "kurslar": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kurs_id", "nom", "format", "narx", "valyuta", "faol", "guruhlar"],
+        "properties": {
+          "kurs_id": {"type": "string", "pattern": "^K-[A-Z]{2,5}-\\d{2}$"},
+          "nom": {"type": "string"},
+          "format": {"type": "string", "enum": ["offline", "online", "gibrid"]},
+          "narx": {"type": "integer", "minimum": 1},
+          "valyuta": {"type": "string"},
+          "davomiylik_oy": {"type": ["integer", "null"]},
+          "ustoz_id": {"type": ["string", "null"]},
+          "faol": {"type": "boolean"},
+          "guruhlar": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["guruh_id", "boshlanish", "tugash", "kunlar", "vaqt", "xona", "sigim", "band", "holat"],
+              "properties": {
+                "guruh_id": {"type": "string", "pattern": "^G-[A-Z]{2,5}-\\d{2}-[A-Z]{3}$"},
+                "boshlanish": {"type": "string"},
+                "tugash": {"type": "string"},
+                "kunlar": {"type": "array", "items": {"type": "string"}},
+                "vaqt": {"type": "string"},
+                "xona": {"type": "string"},
+                "sigim": {"type": "integer"},
+                "band": {"type": "integer"},
+                "holat": {"type": "string", "enum": ["davom", "yangi", "tugadi", "bekor"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

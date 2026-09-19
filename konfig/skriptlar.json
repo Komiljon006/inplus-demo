@@ -1,0 +1,45 @@
+{
+  "versiya": "1.0",
+  "skriptlar": [
+    {
+      "skript_id": "S-001", "nom": "tolov_eslatma_3kun", "maqsad": "qarzdor talabaga 3 kun oldin eslatma",
+      "kanallar": ["sms", "tg"],
+      "matn": {"uz": "Assalomu alaykum, {ism}! {kurs} kursi uchun {summa} so'm to'lov muddati {sana}. IN PLUS", "ru": "Здравствуйте, {ism}! Оплата {summa} сум за курс {kurs} до {sana}. IN PLUS"},
+      "ozgaruvchilar": ["ism", "kurs", "summa", "sana"],
+      "sms_uzunlik_max": 160,
+      "kimga_turi": "talaba",
+      "limit": {"bir_odamga_kunlik": 1, "dublikat_soat": 72, "kunlik_jami": 300},
+      "vaqt_oynasi": "09:00-20:00",
+      "tasdiqlagan": "X-001", "tasdiq_sana": "2026-09-19", "holat": "faol",
+      "ruxsat_agentlar": ["*"]
+    },
+    {
+      "skript_id": "S-900", "nom": "insident_xodimga", "maqsad": "agent yiqilsa xodimga ogohlantirish",
+      "kanallar": ["tg"], "matn": {"uz": "⚠️ {agent}: {xabar} ({vaqt})"},
+      "ozgaruvchilar": ["agent", "xabar", "vaqt"], "kimga_turi": "xodim",
+      "limit": {"bir_odamga_kunlik": 50, "dublikat_soat": 1}, "vaqt_oynasi": "00:00-24:00",
+      "tasdiqlagan": "X-001", "tasdiq_sana": "2026-09-19", "holat": "faol", "ruxsat_agentlar": ["X2", "X1", "D1", "D6", "N3", "SHLYUZ"]
+    },
+    {
+      "skript_id": "S-901", "nom": "kunlik_xulosa_direktor", "maqsad": "direktorga kunlik xulosa",
+      "kanallar": ["tg"], "matn": {"uz": "📊 {sana}: lid {lidlar}, faol {faol}, qarzdor {qarzdor}, agent ok {ok}/{jami}"},
+      "ozgaruvchilar": ["sana", "lidlar", "faol", "qarzdor", "ok", "jami"], "kimga_turi": "xodim",
+      "vaqt_oynasi": "00:00-24:00",
+      "tasdiqlagan": "X-001", "tasdiq_sana": "2026-09-19", "holat": "faol", "ruxsat_agentlar": ["W1"]
+    },
+    {
+      "skript_id": "S-902", "nom": "jadval_xatosi", "maqsad": "jadvalda xato bo'lsa direktorga",
+      "kanallar": ["tg"], "matn": {"uz": "📋 Jadvalda {soni} xato: {royxat}"},
+      "ozgaruvchilar": ["soni", "royxat"], "kimga_turi": "xodim",
+      "vaqt_oynasi": "00:00-24:00",
+      "tasdiqlagan": "X-001", "tasdiq_sana": "2026-09-19", "holat": "faol", "ruxsat_agentlar": ["D6"]
+    },
+    {
+      "skript_id": "S-999", "nom": "test", "maqsad": "sinov xabari",
+      "kanallar": ["sms", "tg"], "matn": {"uz": "IN PLUS test: {matn}"},
+      "ozgaruvchilar": ["matn"], "kimga_turi": "xodim",
+      "limit": {"bir_odamga_kunlik": 100}, "vaqt_oynasi": "00:00-24:00",
+      "tasdiqlagan": "X-001", "tasdiq_sana": "2026-09-19", "holat": "faol", "ruxsat_agentlar": ["*"]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[Unit]
+Description=IN PLUS Zanjirlar auditori (x1)
+After=network.target
+
+[Service]
+Type=oneshot
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/x1_auditor/main.py --bir-marta

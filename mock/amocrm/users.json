@@ -1,0 +1,24 @@
+{
+  "_embedded": {
+    "users": [
+      {
+        "id": 301,
+        "name": "Madina",
+        "email": "madina@inplus.uz",
+        "phone": "+998901112233"
+      },
+      {
+        "id": 302,
+        "name": "Jasur",
+        "email": "jasur@inplus.uz",
+        "phone": "+998901112244"
+      },
+      {
+        "id": 303,
+        "name": "Direktor",
+        "email": "dir@inplus.uz",
+        "phone": "+998900000001"
+      }
+    ]
+  }
+}

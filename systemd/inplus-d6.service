@@ -1,0 +1,11 @@
+[Unit]
+Description=IN PLUS Kurslar jadvali (d6)
+After=network.target
+
+[Service]
+Type=oneshot
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/d6_jadval/main.py --bir-marta

@@ -1,0 +1,9 @@
+[Unit]
+Description=IN PLUS X0 sinov timer (x0)
+
+[Timer]
+OnCalendar=*:0/5
+Persistent=true
+
+[Install]
+WantedBy=timers.target

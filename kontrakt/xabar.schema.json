@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "xabar",
+  "description": "Shlyuzga yuboriladigan xabar so'rovi (POST /yubor)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kimdan_agent", "kanal", "kimga", "skript_id", "til", "ozgaruvchilar", "idempotent_kalit"],
+  "properties": {
+    "kimdan_agent": {"type": "string"},
+    "kanal": {"type": "string", "enum": ["sms", "tg"]},
+    "kimga": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tur", "id"],
+      "properties": {
+        "tur": {"type": "string", "enum": ["talaba", "lid", "xodim"]},
+        "id": {"type": "string"},
+        "telegram_id": {"type": ["integer", "null"]},
+        "telefon": {"type": ["string", "null"]}
+      }
+    },
+    "skript_id": {"type": "string", "pattern": "^S-\\d{3}$"},
+    "til": {"type": "string"},
+    "ozgaruvchilar": {"type": "object"},
+    "idempotent_kalit": {"type": "string", "minLength": 1},
+    "muhimlik": {"type": "string", "enum": ["oddiy", "kritik"]}
+  }
+}

@@ -1,0 +1,11 @@
+[Unit]
+Description=IN PLUS Sborshik dannyx (d1)
+After=network.target inplus-d6.service
+
+[Service]
+Type=oneshot
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/d1_sborshik/main.py --bir-marta

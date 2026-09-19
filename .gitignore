@@ -1,0 +1,9 @@
+.venv/
+data/
+run/
+__pycache__/
+*.pyc
+*.bak
+*.bak2
+mock/**/*.bak
+wiki/_html/

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "skript",
+  "description": "Skriptlar reestri (konfig/skriptlar.json) — N3 boshqaradi",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["versiya", "skriptlar"],
+  "properties": {
+    "versiya": {"type": "string", "pattern": "^\\d+\\.\\d+$"},
+    "skriptlar": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["skript_id", "nom", "kanallar", "matn", "kimga_turi", "holat", "ruxsat_agentlar"],
+        "properties": {
+          "skript_id": {"type": "string", "pattern": "^S-\\d{3}$"},
+          "nom": {"type": "string"},
+          "maqsad": {"type": "string"},
+          "kanallar": {"type": "array", "items": {"type": "string", "enum": ["sms", "tg"]}, "minItems": 1},
+          "matn": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {"type": "string"}
+          },
+          "ozgaruvchilar": {"type": "array", "items": {"type": "string"}},
+          "sms_uzunlik_max": {"type": "integer"},
+          "kimga_turi": {"type": "string", "enum": ["talaba", "lid", "xodim"]},
+          "limit": {
+            "type": "object",
+            "properties": {
+              "bir_odamga_kunlik": {"type": "integer"},
+              "dublikat_soat": {"type": "integer"},
+              "kunlik_jami": {"type": "integer"}
+            }
+          },
+          "vaqt_oynasi": {"type": "string", "pattern": "^\\d{2}:\\d{2}-\\d{2}:\\d{2}$"},
+          "tasdiqlagan": {"type": "string"},
+          "tasdiq_sana": {"type": "string"},
+          "holat": {"type": "string", "enum": ["faol", "arxiv"]},
+          "ruxsat_agentlar": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+        }
+      }
+    }
+  }
+}

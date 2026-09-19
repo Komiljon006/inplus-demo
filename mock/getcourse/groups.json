@@ -1,0 +1,72 @@
+{
+  "success": true,
+  "data": {
+    "fields": [
+      "guruh_kod",
+      "guruh_nom",
+      "kurs_id"
+    ],
+    "rows": [
+      [
+        "G-BUX-01-SEN",
+        "Buxgalter noldan",
+        "K-BUX-01"
+      ],
+      [
+        "G-BUX-01-OKT",
+        "Buxgalter noldan",
+        "K-BUX-01"
+      ],
+      [
+        "G-ENG-01-SEN",
+        "Ingliz tili A1",
+        "K-ENG-01"
+      ],
+      [
+        "G-ENG-01-OKT",
+        "Ingliz tili A1",
+        "K-ENG-01"
+      ],
+      [
+        "G-SMM-01-SEN",
+        "SMM boshlang'ich",
+        "K-SMM-01"
+      ],
+      [
+        "G-SMM-01-OKT",
+        "SMM boshlang'ich",
+        "K-SMM-01"
+      ],
+      [
+        "G-IT-01-SEN",
+        "Dasturlash noldan",
+        "K-IT-01"
+      ],
+      [
+        "G-IT-01-OKT",
+        "Dasturlash noldan",
+        "K-IT-01"
+      ],
+      [
+        "G-DIZ-01-SEN",
+        "Grafik dizayn",
+        "K-DIZ-01"
+      ],
+      [
+        "G-MAT-01-SEN",
+        "Matematika",
+        "K-MAT-01"
+      ],
+      [
+        "G-BUX-02-SEN",
+        "Buxgalter PRO",
+        "K-BUX-02"
+      ],
+      [
+        "G-ENG-02-SEN",
+        "IELTS",
+        "K-ENG-02"
+      ]
+    ]
+  }
+}

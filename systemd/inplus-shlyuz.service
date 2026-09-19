@@ -1,0 +1,17 @@
+[Unit]
+Description=IN PLUS Xabar shlyuzi (N1+N2) (shlyuz)
+After=network.target
+
+[Service]
+Type=simple
+User=inplus
+EnvironmentFile=/opt/inplus/konfig/inplus.env
+Environment=INPLUS_ILDIZ=/opt/inplus
+WorkingDirectory=/opt/inplus
+ExecStart=/usr/bin/python3 /opt/inplus/agents/shlyuz/main.py
+Restart=always
+RestartSec=3
+
+
+[Install]
+WantedBy=multi-user.target

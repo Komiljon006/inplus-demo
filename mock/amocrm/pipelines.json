@@ -1,0 +1,46 @@
+{
+  "_embedded": {
+    "pipelines": [
+      {
+        "id": 7712,
+        "name": "Sotuv voronkasi",
+        "_embedded": {
+          "statuses": [
+            {
+              "id": 140,
+              "name": "yangi"
+            },
+            {
+              "id": 141,
+              "name": "aloqa"
+            },
+            {
+              "id": 142,
+              "name": "konsultatsiya"
+            },
+            {
+              "id": 143,
+              "name": "sinov_dars"
+            },
+            {
+              "id": 144,
+              "name": "tolov_kutish"
+            },
+            {
+              "id": 146,
+              "name": "sotildi"
+            },
+            {
+              "id": 147,
+              "name": "yoqotildi"
+            },
+            {
+              "id": 145,
+              "name": "qayta"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

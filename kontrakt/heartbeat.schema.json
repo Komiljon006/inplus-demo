@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "heartbeat",
+  "description": "Agent yurak urishi (run/heartbeat/<agent>.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["agent", "vaqt", "holat", "pid"],
+  "properties": {
+    "agent": {"type": "string"},
+    "vaqt": {"type": "string", "format": "date-time"},
+    "holat": {"type": "string", "enum": ["boshladi", "ishlayapti", "tugadi", "xato"]},
+    "pid": {"type": "integer"},
+    "boshlandi": {"type": ["string", "null"]},
+    "xabar": {"type": "string"},
+    "keyingi_kutilgan": {"type": ["string", "null"]}
+  }
+}
